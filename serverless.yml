@@ -1,0 +1,63 @@
+
+service: reactapp-sls
+frameworkVersion: "=1.65.0"
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: ${opt:region, 'ap-southeast-2'} 
+  stage: ${opt:stage, 'dev'}
+  logRetentionInDays: 30
+  memorySize: 128
+  timeout: 60
+
+custom:
+  siteName: charyeezys-bomb-diggity-reactapp.com
+  client:
+    bucketName: ${self:provider.stage}-${self:custom.siteName}
+
+functions:
+  test_api:
+    handler: src/callbackcode.handler
+    events:
+    - http:
+        path: test
+        method: get
+        cors: true
+          # origin: '*' # <-- Specify allowed origin
+          # headers: # <-- Specify allowed headers
+          #   - Content-Type
+          #   - X-Amz-Date
+          #   - Authorization
+          #   - X-Api-Key
+          #   - X-Amz-Security-Token
+          #   - X-Amz-User-Agent
+          # allowCredentials: false
+
+
+resources:
+  Resources:
+    StaticSite:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: PublicRead
+        BucketName: ${self:custom.client.bucketName}
+        WebsiteConfiguration:
+          IndexDocument: index.html
+    WebAppS3BucketPolicy:
+        Type: AWS::S3::BucketPolicy
+        Properties:
+          Bucket:
+            Ref: StaticSite
+          PolicyDocument:
+            Statement:
+              - Sid: PublicReadGetObject
+                Effect: Allow
+                Principal: "*"
+                Action:
+                - s3:GetObject
+                Resource: arn:aws:s3:::${self:custom.client.bucketName}/*
+
+plugins:
+  - serverless-python-requirements
+  - serverless-finch

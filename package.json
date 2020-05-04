@@ -1,0 +1,26 @@
+{
+  "name": "reactapp-sls",
+  "version": "1.0.0",
+  "description": "ReactApp S3 Hosted Website SLS",
+  "main": "index.html",
+  "dependencies": {
+    "serverless": "^1.69.0",
+    "serverless-finch": "^2.5.2"
+  },
+  "devDependencies": {
+    "serverless-python-requirements": "^5.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/charyeezy/reactapp-sls.git"
+  },
+  "author": "Charlene Leong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/charyeezy/reactapp-sls/issues"
+  },
+  "homepage": "https://github.com/charyeezy/reactapp-sls#readme"
+}
